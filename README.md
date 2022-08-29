@@ -58,16 +58,104 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## structure
+```bash
+├── docker
+│   └── App.Dockerfile
+├── src
+│   ├── constants
+│   │   └── common.constants.ts
+│   ├── decorators
+│   │   ├── auth-bearer.decorator.ts
+│   │   ├── auth.decorator.ts
+│   │   ├── roles.decorator.ts
+│   │   └── serialization.decorator.ts
+│   ├── exceptions
+│   │   └── validation.exceptions.ts
+│   ├── filters
+│   │   ├── all-exceptions.filter.ts
+│   │   ├── bad-request-exception.filter.ts
+│   │   ├── forbidden-exception.filter.ts
+│   │   ├── index.ts
+│   │   ├── not-found-exception.filter.ts
+│   │   ├── unauthorized-exception.filter.ts
+│   │   ├── validation-exceptions.filter.ts
+│   │   └── ws-exceptions.filter.ts
+│   ├── guards
+│   │   ├── jwt-access.guard.ts
+│   │   ├── jwt-refresh.guard.ts
+│   │   ├── jwt-ws-access.guard.ts
+│   │   └── roles.guard.ts
+│   ├── interceptors
+│   │   ├── serialization.interceptor.ts
+│   │   └── wrap-response.interceptor.ts
+│   ├── interfaces
+│   │   ├── exception-response.interface.ts
+│   │   ├── jwt-decode-response.interface.ts
+│   │   ├── paginatedEntity.interface.ts
+│   │   └── pagination-params.interface.ts
+│   ├── main.ts
+│   ├── modules
+│   │   ├── app
+│   │   │   ├── app.controller.ts
+│   │   │   ├── app.gateway.ts
+│   │   │   ├── app.module.ts
+│   │   │   └── app.service.ts
+│   │   └── v1
+│   │       ├── auth
+│   │       │   ├── auth-constants.ts
+│   │       │   ├── auth.controller.spec.ts
+│   │       │   ├── auth.controller.ts
+│   │       │   ├── auth.module.ts
+│   │       │   ├── auth.repository.ts
+│   │       │   ├── auth.service.spec.ts
+│   │       │   ├── auth.service.ts
+│   │       │   ├── dto
+│   │       │   │   ├── jwt-tokens.dto.ts
+│   │       │   │   ├── refresh-token.dto.ts
+│   │       │   │   ├── sign-in.dto.ts
+│   │       │   │   ├── sign-up.dto.ts
+│   │       │   │   └── verify-user.dto.ts
+│   │       │   ├── guards
+│   │       │   │   └── local-auth.guard.ts
+│   │       │   ├── interfaces
+│   │       │   │   ├── decoded-user.interface.ts
+│   │       │   │   ├── jwt-strategy-validate.interface.ts
+│   │       │   │   ├── login-payload.interface.ts
+│   │       │   │   └── validate-user-output.interface.ts
+│   │       │   └── strategies
+│   │       │       ├── jwt-access.strategy.ts
+│   │       │       ├── jwt-refresh.strategy.ts
+│   │       │       ├── jwt-ws-access.strategy.ts
+│   │       │       └── local.strategy.ts
+│   │       ├── users
+│   │       │   ├── dto
+│   │       │   │   ├── update-user.dto.ts
+│   │       │   │   └── user-response.dto.ts
+│   │       │   ├── interfaces
+│   │       │   │   └── user.interface.ts
+│   │       │   ├── schemas
+│   │       │   │   └── users.schema.ts
+│   │       │   ├── users-constants.ts
+│   │       │   ├── users.controller.spec.ts
+│   │       │   ├── users.controller.ts
+│   │       │   ├── users.module.ts
+│   │       │   ├── users.repository.ts
+│   │       │   ├── users.service.spec.ts
+│   │       │   └── users.service.ts
+│   │       └── v1.module.ts
+│   ├── pipes
+│   │   └── parse-object-id.pipe.ts
+│   └── templates
+│       └── verify-password.hbs
+├── tsconfig.build.json
+├── tsconfig.json
+├── typedoc.json
+├── index.js
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── docker-compose.yml
+└──README.md
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+```
