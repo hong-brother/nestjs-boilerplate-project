@@ -1,0 +1,19 @@
+
+##config
+---
+context: "/"
+group: d-drive
+project: cloud-node-drive
+description: public drive manager drive
+local:
+  common:
+    http-port: 3000
+    log-level: info
+development:
+  common:
+    http-port: 3000
+    log-level: info
+production:
+  common:
+    http-port: 3000
+    log-level: info
