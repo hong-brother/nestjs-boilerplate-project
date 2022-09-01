@@ -5,25 +5,21 @@ import { AppConfig } from './app.config';
 export class SwaggerDocumentConfig {
   private readonly appConfig: AppConfig;
   private readonly document: DocumentBuilder;
-  private title: string;
-  private version: number;
 
   constructor(appConfig: AppConfig) {
     this.document = new DocumentBuilder();
     this.appConfig = appConfig;
   }
-  createDocument(): DocumentBuilder {
-    this.document.setTitle('cloud-node-drive');
-    this.document.addServer(
-      `${this.appConfig.getProtocol()}://localhost:${this.appConfig.getPort()}`,
-    );
-    this.document.setBasePath('api');
+  createDocument() {
+    this.document.setTitle(this.appConfig.project);
+    // this.document.addServer();
     this.document.addTag('auth');
-    return this.document;
+    this.document.setBasePath('api');
+    // return this.document;
   }
 
   setUp(app) {
     const doc = SwaggerModule.createDocument(app, this.document.build());
-    SwaggerModule.setup('api-doc', app, doc);
+    SwaggerModule.setup('document', app, doc);
   }
 }

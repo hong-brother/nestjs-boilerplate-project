@@ -9,6 +9,7 @@ import { AppConfig } from './config/app.config';
     ConfigModule.forRoot({
       load: [AppConfig.getConfig],
       isGlobal: true,
+      cache: true,
     }),
   ],
   controllers: [AppController],

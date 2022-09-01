@@ -6,10 +6,12 @@ import { Logger } from '@nestjs/common';
 import os from 'os';
 
 export class AppConfig {
-  private readonly PROTOCOL: string = 'http';
-  private ip: string;
-  private port: string;
-  private config: [];
+  private readonly _protocol: string = 'http';
+  private _config: [];
+  private _ip: string;
+  private _port: string;
+  private _group: string;
+  private _project: string;
 
   constructor() {
     this.load();
@@ -21,28 +23,36 @@ export class AppConfig {
   }
 
   private load(): void {
-    this.config = yaml.load(
+    this._config = yaml.load(
       fs.readFileSync(join(__dirname, `config.yml`), 'utf8'),
     );
-    this.ip = ip.address();
-    this.port =
-      this.config[process.env.NODE_ENV || 'local']['common']['http-port'];
+    this._ip = ip.address();
+    this._port =
+      this._config[process.env.NODE_ENV || 'local']['common']['http-port'];
   }
 
-  public getConfig(): [] {
-    return this.config;
+  get protocol(): string {
+    return this._protocol;
   }
 
-  public getPort(): string {
-    return this.port;
+  get config(): [] {
+    return this._config;
   }
 
-  public getIp(): string {
-    return this.ip;
+  get ip(): string {
+    return this._ip;
   }
 
-  public getProtocol(): string {
-    return this.PROTOCOL;
+  get port(): string {
+    return this._port;
+  }
+
+  get group(): string {
+    return this._group;
+  }
+
+  get project(): string {
+    return this._project;
   }
 
   private initialize(): void {
@@ -58,8 +68,8 @@ export class AppConfig {
     Logger.log(`hostname: ${os.hostname()}`);
     Logger.log(`user home: ${os.userInfo().username}`);
     Logger.log(`user home directory: ${os.userInfo().homedir}`);
-    Logger.log(`server api ip: ${this.ip}`);
-    Logger.log(`${this.PROTOCOL}://${this.ip}:${this.port}/document`);
+    Logger.log(`server api ip: ${this._ip}`);
+    Logger.log(`${this._protocol}://${this._ip}:${this._port}/document`);
     Logger.log(
       '========================================================================================================',
     );

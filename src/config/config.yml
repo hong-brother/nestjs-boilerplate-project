@@ -2,9 +2,9 @@
 ##config
 ---
 context: "/"
-group: d-drive
-project: cloud-node-drive
-description: public drive manager drive
+group: nestjs
+project: nestjs-boilerplate-project
+description: nestjs-boilerplate-project
 local:
   common:
     http-port: 3000

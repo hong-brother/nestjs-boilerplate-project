@@ -7,8 +7,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const appConfig = new AppConfig();
-  new SwaggerDocumentConfig(appConfig).setUp(app);
-  await app.listen(3000);
+
+  const d = new SwaggerDocumentConfig(appConfig);
+  d.createDocument();
+  d.setUp(app);
+
   app.setGlobalPrefix('/api');
+  await app.listen(3000);
 }
-bootstrap();
+bootstrap().then(() => {});
