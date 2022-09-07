@@ -6,12 +6,14 @@ import { Logger } from '@nestjs/common';
 import os from 'os';
 
 export class AppConfig {
+  private readonly logger = new Logger(AppConfig.name);
   private readonly _protocol: string = 'http';
   private _config: [];
   private _ip: string;
   private _port: string;
   private _group: string;
   private _project: string;
+  private _globalPrefix = '/api';
 
   constructor() {
     this.load();
@@ -55,22 +57,30 @@ export class AppConfig {
     return this._project;
   }
 
+  get globalPreFix(): string {
+    return this._globalPrefix;
+  }
+
+  private log(): void {
+    this.logger.log('~~~~');
+  }
+
   private initialize(): void {
-    Logger.log('');
-    Logger.log(
+    this.logger.log('');
+    this.logger.log(
       '========================================================================================================',
     );
-    Logger.log(`node version: ${process.version}`);
-    Logger.log(`node env: ${process.env.NODE_ENV || 'local'}`);
-    Logger.log(`cpu core: ${os.cpus().length}`);
-    Logger.log(`host platform: ${process.platform}`);
-    Logger.log(`host architecture: ${process.arch}`);
-    Logger.log(`hostname: ${os.hostname()}`);
-    Logger.log(`user home: ${os.userInfo().username}`);
-    Logger.log(`user home directory: ${os.userInfo().homedir}`);
-    Logger.log(`server api ip: ${this._ip}`);
-    Logger.log(`${this._protocol}://${this._ip}:${this._port}/document`);
-    Logger.log(
+    this.logger.log(`node version: ${process.version}`);
+    this.logger.log(`node env: ${process.env.NODE_ENV || 'local'}`);
+    this.logger.log(`cpu core: ${os.cpus().length}`);
+    this.logger.log(`host platform: ${process.platform}`);
+    this.logger.log(`host architecture: ${process.arch}`);
+    this.logger.log(`hostname: ${os.hostname()}`);
+    this.logger.log(`user home: ${os.userInfo().username}`);
+    this.logger.log(`user home directory: ${os.userInfo().homedir}`);
+    this.logger.log(`server api ip: ${this._ip}`);
+    this.logger.log(`${this._protocol}://${this._ip}:${this._port}/document`);
+    this.logger.log(
       '========================================================================================================',
     );
   }
