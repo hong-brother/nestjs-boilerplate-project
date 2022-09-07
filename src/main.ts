@@ -8,9 +8,9 @@ async function bootstrap() {
 
   const appConfig = new AppConfig();
 
-  const d = new SwaggerDocumentConfig(appConfig);
-  d.createDocument();
-  d.setUp(app);
+  const document = new SwaggerDocumentConfig(appConfig);
+  document.createDocument();
+  document.setUp(app);
 
   app.setGlobalPrefix('/api');
   await app.listen(3000);
