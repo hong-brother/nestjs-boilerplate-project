@@ -79,7 +79,9 @@ export class AppConfig {
     this.logger.log(`user home: ${os.userInfo().username}`);
     this.logger.log(`user home directory: ${os.userInfo().homedir}`);
     this.logger.log(`server api ip: ${this._ip}`);
-    this.logger.log(`${this._protocol}://${this._ip}:${this._port}/document`);
+    this.logger.log(
+      `${this._protocol}://${this._ip}:${this._port}${this.globalPreFix}/document`,
+    );
     this.logger.log(
       '========================================================================================================',
     );

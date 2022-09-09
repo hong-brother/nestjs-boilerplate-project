@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AppConfig } from './config/app.config';
+import { SharedModule } from './shared/shared.module';
+import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { AppConfig } from './config/app.config';
       isGlobal: true,
       cache: true,
     }),
+    HealthCheckerModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
