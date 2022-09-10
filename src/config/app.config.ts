@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import ip from 'ip';
 import { Logger } from '@nestjs/common';
 import os from 'os';
-
+import cfonts from 'cfonts';
 export class AppConfig {
   private readonly logger = new Logger(AppConfig.name);
   private readonly _protocol: string = 'http';
@@ -14,27 +14,42 @@ export class AppConfig {
   private _group: string;
   private _project: string;
   private _globalPrefix = '/api';
-  private static YAML_CONFIG_FILENAME = 'config.yaml';
 
   constructor() {
     this.load();
-    this.initialize();
   }
 
   static getConfig() {
-    console.log(join(__dirname, '..', '..', 'config', 'config.yml'));
     return yaml.load(
-      readFileSync(join(__dirname, '..', '..', 'config', 'config.yml'), 'utf8'),
+      readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
   }
 
   private load(): void {
     this._config = yaml.load(
-      readFileSync(join(__dirname, '..', '..', 'config', 'config.yml'), 'utf8'),
+      readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
     this._ip = ip.address();
     this._port =
       this._config[process.env.NODE_ENV || 'local']['common']['http-port'];
+  }
+
+  private banner(): void {
+    cfonts.say(process.env.npm_package_name, {
+      font: 'block', // define the font face
+      align: 'center', // define text alignment
+      colors: ['yellow'], // define all colors
+      background: 'transparent', // define the background color, you can also use `backgroundColor` here as key
+      letterSpacing: 0, // define letter spacing
+      lineHeight: 1, // define the line height
+      space: true, // define if the output text should have empty lines on top and on the bottom
+      maxLength: '0', // define how many character can be on one line
+      gradient: false, // define your two gradient colors
+      independentGradient: false, // define if you want to recalculate the gradient for each new line
+      transitionGradient: false, // define if this is a transition between colors directly
+      env: 'node', // define the environment cfonts is being executed in
+    });
+    console.log('feat. hsnam');
   }
 
   get protocol(): string {
@@ -69,7 +84,8 @@ export class AppConfig {
     this.logger.log('~~~~');
   }
 
-  private initialize(): void {
+  public initialize(): void {
+    this.banner();
     this.logger.log('');
     this.logger.log(
       '========================================================================================================',
