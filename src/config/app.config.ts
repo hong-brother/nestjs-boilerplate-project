@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 import ip from 'ip';
@@ -8,25 +8,28 @@ import os from 'os';
 export class AppConfig {
   private readonly logger = new Logger(AppConfig.name);
   private readonly _protocol: string = 'http';
-  private _config: [];
+  private _config: Record<string, any>;
   private _ip: string;
   private _port: string;
   private _group: string;
   private _project: string;
   private _globalPrefix = '/api';
+  private static YAML_CONFIG_FILENAME = 'config.yaml';
 
   constructor() {
     this.load();
     this.initialize();
   }
 
-  static getConfig(): [] {
-    return yaml.load(fs.readFileSync(join(__dirname, `config.yml`), 'utf8'));
+  static getConfig() {
+    return yaml.load(
+      readFileSync(join(__dirname, this.YAML_CONFIG_FILENAME), 'utf8'),
+    ) as Record<string, any>;
   }
 
   private load(): void {
     this._config = yaml.load(
-      fs.readFileSync(join(__dirname, `config.yml`), 'utf8'),
+      readFileSync(join(__dirname, `config.yml`), 'utf8'),
     );
     this._ip = ip.address();
     this._port =
@@ -37,7 +40,7 @@ export class AppConfig {
     return this._protocol;
   }
 
-  get config(): [] {
+  get config(): Record<string, any> {
     return this._config;
   }
 

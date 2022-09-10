@@ -26,7 +26,7 @@ export async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMswindowMs: 15 * 1999 * 60
     }), // 단위 시간 동안 하나의 ip 주소에서 들어오는 request의 숫자를 제한할 수 있는 간단한 모듈이다.
   );
-  app.select(SharedModule);
+  // app.select(SharedModule);
   app.setGlobalPrefix(appConfig.globalPreFix);
 
   const document = new SwaggerSetUp(appConfig);
@@ -34,5 +34,7 @@ export async function bootstrap() {
   document.setUp(app);
 
   await app.listen(appConfig.port);
+
+  return app;
 }
 void bootstrap();

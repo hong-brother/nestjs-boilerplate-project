@@ -3,7 +3,7 @@ import { Global, Module } from '@nestjs/common';
 import { GeneratorService } from './services/generator.service';
 
 const providers = [GeneratorService];
-@Global()
+// @Global()
 @Module({
   providers,
   imports: [HttpModule],
