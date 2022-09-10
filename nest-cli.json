@@ -4,10 +4,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "assets": [
-      {
-        "include": "**/*.yml",
-        "watchAssets": true
-      }
+      "**/*.yml"
     ]
   }
 }

@@ -22,15 +22,16 @@ export class AppConfig {
   }
 
   static getConfig() {
+    console.log(join(__dirname, '..', '..', 'config', 'config.yml'));
     return yaml.load(
-      readFileSync(join(__dirname, this.YAML_CONFIG_FILENAME), 'utf8'),
+      readFileSync(join(__dirname, '..', '..', 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
   }
 
   private load(): void {
     this._config = yaml.load(
-      readFileSync(join(__dirname, `config.yml`), 'utf8'),
-    );
+      readFileSync(join(__dirname, '..', '..', 'config', 'config.yml'), 'utf8'),
+    ) as Record<string, any>;
     this._ip = ip.address();
     this._port =
       this._config[process.env.NODE_ENV || 'local']['common']['http-port'];
