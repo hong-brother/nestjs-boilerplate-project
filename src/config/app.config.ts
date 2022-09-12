@@ -2,9 +2,13 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 import ip from 'ip';
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import os from 'os';
 import cfonts from 'cfonts';
+import { ConfigService } from '@nestjs/config';
+import { isEmpty } from 'class-validator';
+
+@Injectable()
 export class AppConfig {
   private readonly logger = new Logger(AppConfig.name);
   private readonly _protocol: string = 'http';
@@ -15,23 +19,12 @@ export class AppConfig {
   private _project: string;
   private _globalPrefix = '/api';
 
-  constructor() {
-    this.load();
-  }
+  constructor(private configService: ConfigService) {}
 
   static getConfig() {
     return yaml.load(
       readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
-  }
-
-  private load(): void {
-    this._config = yaml.load(
-      readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
-    ) as Record<string, any>;
-    this._ip = ip.address();
-    this._port =
-      this._config[process.env.NODE_ENV || 'local']['common']['http-port'];
   }
 
   private banner(): void {
@@ -65,7 +58,7 @@ export class AppConfig {
   }
 
   get port(): string {
-    return this._port;
+    return this.configService.get('local')['common']['http-port'];
   }
 
   get group(): string {
@@ -77,11 +70,7 @@ export class AppConfig {
   }
 
   get globalPreFix(): string {
-    return this._globalPrefix;
-  }
-
-  private log(): void {
-    this.logger.log('~~~~');
+    return this.get('prefix');
   }
 
   public initialize(): void {
@@ -105,5 +94,15 @@ export class AppConfig {
     this.logger.log(
       '========================================================================================================',
     );
+  }
+
+  private get(key: string): string {
+    const value = this.configService.get<string>(key);
+
+    if (isEmpty(value)) {
+      throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
+    }
+
+    return value;
   }
 }

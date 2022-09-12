@@ -1,5 +1,5 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { OpenAPIObject } from '@nestjs/swagger/dist/interfaces';
+import { ConfigService } from '@nestjs/config';
 import { AppConfig } from './app.config';
 
 export class SwaggerSetUp {
@@ -12,7 +12,7 @@ export class SwaggerSetUp {
   }
 
   createDocument() {
-    this.document.setTitle(this.appConfig.project);
+    // this.document.setTitle(this.appConfig.get('project'));
     // this.document.addServer();
     this.document.setDescription(this.description());
     return this.document;
@@ -20,7 +20,11 @@ export class SwaggerSetUp {
 
   setUp(app) {
     const doc = SwaggerModule.createDocument(app, this.document.build());
-    SwaggerModule.setup(`${this.appConfig.globalPreFix}/document`, app, doc);
+    // SwaggerModule.setup(
+    //   `${this.appConfig.get('globalPrefix')}/document`,
+    //   app,
+    //   doc,
+    // );
   }
 
   private description() {

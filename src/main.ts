@@ -8,6 +8,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { SharedModule } from './shared/shared.module';
+import { ConfigService } from '@nestjs/config';
 
 export async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -15,8 +16,11 @@ export async function bootstrap() {
     new ExpressAdapter(),
     { cors: true },
   );
+  // get config
+  // https://ru-nestjs-docs.netlify.app/application-context
+  const configService = app.select(SharedModule).get(AppConfig);
+
   // setting
-  const appConfig = new AppConfig();
   app.enableVersioning(); // router version 명시 할 수 있도록
   app.use(compression()); // http 압축
   // app.use(helmet()); //노드 보안 모듈 기본 설정
@@ -26,14 +30,13 @@ export async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMswindowMs: 15 * 1999 * 60
     }), // 단위 시간 동안 하나의 ip 주소에서 들어오는 request의 숫자를 제한할 수 있는 간단한 모듈이다.
   );
-  // app.select(SharedModule);
-  app.setGlobalPrefix(appConfig.globalPreFix);
+  app.setGlobalPrefix(configService.globalPreFix);
 
-  const document = new SwaggerSetUp(appConfig);
+  const document = new SwaggerSetUp(configService);
   document.createDocument();
   document.setUp(app);
 
-  await app.listen(appConfig.port);
+  await app.listen(configService.port);
 
   return app;
 }
