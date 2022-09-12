@@ -58,7 +58,7 @@ export class AppConfig {
   }
 
   get port(): string {
-    return this.configService.get('local')['common']['http-port'];
+    return this.get('common.http-port');
   }
 
   get group(): string {
@@ -97,7 +97,16 @@ export class AppConfig {
   }
 
   private get(key: string): string {
-    const value = this.configService.get<string>(key);
+    let value;
+    const envGroup = this.configService.get(process.env.NODE_ENV || 'local');
+    const keys = key.split('.');
+    if (keys.length === 1) {
+      value = keys[0];
+    } else {
+      keys.map((item) => {
+        value += envGroup[item];
+      });
+    }
 
     if (isEmpty(value)) {
       throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
