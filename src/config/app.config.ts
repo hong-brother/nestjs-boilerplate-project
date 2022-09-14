@@ -7,6 +7,7 @@ import os from 'os';
 import cfonts from 'cfonts';
 import { ConfigService } from '@nestjs/config';
 import { isEmpty } from 'class-validator';
+import { get } from 'lodash';
 
 @Injectable()
 export class AppConfig {
@@ -23,9 +24,13 @@ export class AppConfig {
 
   static getConfig() {
     // https://www.npmjs.com/package/env-schema
-    return yaml.load(
+    const data = yaml.load(
       readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
+    const common = get(data, ['local', 'common', 'http-port']);
+    debugger;
+
+    return data;
   }
 
   private banner(): void {
