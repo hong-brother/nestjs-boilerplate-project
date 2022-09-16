@@ -12,19 +12,25 @@ export class SwaggerSetUp {
   }
 
   createDocument() {
-    // this.document.setTitle(this.appConfig.get('project'));
-    // this.document.addServer();
+    this.document.setTitle(process.env.npm_package_name);
+    this.document.setVersion(process.env.npm_package_version);
+    this.document.addServer(
+      `${this.appConfig.protocol}://localhost:${this.appConfig.port}`,
+    );
+    this.document.addServer(
+      `${this.appConfig.protocol}://${this.appConfig.ip}:${this.appConfig.port}`,
+    );
     this.document.setDescription(this.description());
     return this.document;
   }
 
   setUp(app) {
     const doc = SwaggerModule.createDocument(app, this.document.build());
-    // SwaggerModule.setup(
-    //   `${this.appConfig.get('globalPrefix')}/document`,
-    //   app,
-    //   doc,
-    // );
+    SwaggerModule.setup(
+      `${this.appConfig.getCommon('prefix')}/document`,
+      app,
+      doc,
+    );
   }
 
   private description() {

@@ -12,13 +12,7 @@ import { get } from 'lodash';
 @Injectable()
 export class AppConfig {
   private readonly logger = new Logger(AppConfig.name);
-  private readonly _protocol: string = 'http';
-  private _config: Record<string, any>;
-  private _ip: string;
-  private _port: string;
-  private _group: string;
-  private _project: string;
-  private _globalPrefix = '/api';
+  private readonly httpProtocol: string = 'http';
 
   constructor(private configService: ConfigService) {}
 
@@ -48,15 +42,11 @@ export class AppConfig {
   }
 
   get protocol(): string {
-    return this._protocol;
-  }
-
-  get config(): Record<string, any> {
-    return this._config;
+    return this.httpProtocol;
   }
 
   get ip(): string {
-    return this._ip;
+    return ip.address();
   }
 
   get port(): string {
@@ -67,11 +57,7 @@ export class AppConfig {
     return this.getCommon('group');
   }
 
-  get project(): string {
-    return this.getCommon('project');
-  }
-
-  get globalPreFix(): string {
+  get preFix(): string {
     return this.getCommon('prefix');
   }
 
@@ -89,16 +75,16 @@ export class AppConfig {
     this.logger.log(`hostname: ${os.hostname()}`);
     this.logger.log(`user home: ${os.userInfo().username}`);
     this.logger.log(`user home directory: ${os.userInfo().homedir}`);
-    this.logger.log(`server api ip: ${this._ip}`);
+    this.logger.log(`server api ip: ${this.ip}`);
     this.logger.log(
-      `${this._protocol}://${this._ip}:${this._port}${this.globalPreFix}/document`,
+      `${this.protocol}://${this.ip}:${this.port}${this.preFix}/document`,
     );
     this.logger.log(
       '========================================================================================================',
     );
   }
 
-  private getCommon(key: string): string {
+  public getCommon(key: string): string {
     const value = this.configService.get(key);
 
     if (isEmpty(value)) {
@@ -107,7 +93,7 @@ export class AppConfig {
 
     return value;
   }
-  private get(key: string): string {
+  public get(key: string): string {
     const env = process.env.NODE_ENV || 'local';
     const value = this.configService.get(`${env}.${key}`);
 
