@@ -24,13 +24,9 @@ export class AppConfig {
 
   static getConfig() {
     // https://www.npmjs.com/package/env-schema
-    const data = yaml.load(
+    return yaml.load(
       readFileSync(join(__dirname, 'config', 'config.yml'), 'utf8'),
     ) as Record<string, any>;
-    const common = get(data, ['local', 'common', 'http-port']);
-    debugger;
-
-    return data;
   }
 
   private banner(): void {
@@ -68,15 +64,15 @@ export class AppConfig {
   }
 
   get group(): string {
-    return this._group;
+    return this.getCommon('group');
   }
 
   get project(): string {
-    return this._project;
+    return this.getCommon('project');
   }
 
   get globalPreFix(): string {
-    return this.get('prefix');
+    return this.getCommon('prefix');
   }
 
   public initialize(): void {
@@ -102,17 +98,18 @@ export class AppConfig {
     );
   }
 
-  private get(key: string): string {
-    let value;
-    const envGroup = this.configService.get(process.env.NODE_ENV || 'local');
-    const keys = key.split('.');
-    if (keys.length === 1) {
-      value = keys[0];
-    } else {
-      keys.map((item) => {
-        value += envGroup[item];
-      });
+  private getCommon(key: string): string {
+    const value = this.configService.get(key);
+
+    if (isEmpty(value)) {
+      throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
     }
+
+    return value;
+  }
+  private get(key: string): string {
+    const env = process.env.NODE_ENV || 'local';
+    const value = this.configService.get(`${env}.${key}`);
 
     if (isEmpty(value)) {
       throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
