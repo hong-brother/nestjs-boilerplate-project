@@ -1,9 +1,14 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import {
+  Injectable,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { AppConfig } from './config/app.config';
 
 @Injectable()
-export class AppService implements OnApplicationBootstrap {
+export class AppService
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
   constructor(private appConfig: AppConfig) {}
 
   getHello(): string {
@@ -12,5 +17,9 @@ export class AppService implements OnApplicationBootstrap {
 
   onApplicationBootstrap(): any {
     this.appConfig.initialize();
+  }
+
+  onApplicationShutdown(signal?: string): any {
+    console.log('shutdown');
   }
 }

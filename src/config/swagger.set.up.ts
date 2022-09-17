@@ -1,5 +1,4 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 import { AppConfig } from './app.config';
 
 export class SwaggerSetUp {
