@@ -7,7 +7,7 @@ import os from 'os';
 import cfonts from 'cfonts';
 import { ConfigService } from '@nestjs/config';
 import { isEmpty } from 'class-validator';
-import { get } from 'lodash';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 @Injectable()
 export class AppConfig {
@@ -51,10 +51,6 @@ export class AppConfig {
 
   get port(): string {
     return this.get('common.http-port');
-  }
-
-  get group(): string {
-    return this.getCommon('group');
   }
 
   get preFix(): string {
