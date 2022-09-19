@@ -18,18 +18,18 @@ export class TypeormConfigService implements TypeOrmOptionsFactory {
       password: this.appConfig.get('database.password'),
       database: this.appConfig.get('database.name'),
       // synchronize: Boolean(this.appConfig.get('database.synchronize')),
-      synchronize: true,
+      synchronize: false,
       dropSchema: false,
       keepConnectionAlive: true,
       logging: this.appConfig.get('database.logging'),
       // entities: [__dirname + '/src/database/entities/*.entity{.ts,.js}'],
       entities: [SystemVersionEntity],
-      // migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-      // cli: {
-      //   entitiesDir: 'src',
-      //   migrationsDir: 'src/database/migrations',
-      //   subscribersDir: 'subscriber',
-      // },
+      migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+      cli: {
+        // entitiesDir: 'src',
+        migrationsDir: 'src/database/migrations',
+        // subscribersDir: 'subscriber',
+      },
       // extra: {
       //   // based on https://node-postgres.com/api/pool
       //   // max connection pool size
