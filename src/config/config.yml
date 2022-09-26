@@ -10,11 +10,38 @@ local:
   common:
     http-port: 3000
     log-level: info
+  database:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    username: nestjs
+    password: nestjs
+    name: boilerplate-db
+    logging: true
+    synchronize: true
 development:
   common:
     http-port: 3000
     log-level: info
+  database:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    username: nestjs
+    password: nestjs
+    name: boilerplate-db
+    logging: true
+    synchronize: true
 production:
   common:
     http-port: 3000
     log-level: info
+  database:
+    type: postgres
+    host: 127.0.0.1
+    port: 5432
+    username: nestjs
+    password: nestjs
+    name: boilerplate-db
+    logging: true
+    synchronize: true
