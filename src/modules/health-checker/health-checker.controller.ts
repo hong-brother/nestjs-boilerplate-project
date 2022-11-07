@@ -4,19 +4,28 @@ import {
   HealthCheckService,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { ApiTags } from '@nestjs/swagger';
+import { HealthCheckerService } from './health-checker.service';
 
+@ApiTags('health-checker')
 @Controller('health')
 export class HealthCheckerController {
   constructor(
-    private healthCheckService: HealthCheckService,
+    private healthCheck: HealthCheckService,
+    private healthCheckerService: HealthCheckerService,
     private http: HttpHealthIndicator,
   ) {}
 
   @Get()
   @HealthCheck()
   async check() {
-    return this.healthCheckService.check([
+    return this.healthCheck.check([
       () => this.http.pingCheck('nestjs', 'https://docs.nestjs.com'),
     ]);
+  }
+
+  @Get('/system-version')
+  async getSystemVersion() {
+    return await this.healthCheckerService.getVersions();
   }
 }

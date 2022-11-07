@@ -8,6 +8,7 @@ import { HealthCheckerModule } from './modules/health-checker/health-checker.mod
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
+import { SystemVersionEntity } from './database/entities/system-version.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,19 @@ import { DataSource } from 'typeorm';
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
       dataSourceFactory: async (options) => {
+        debugger;
+        const system = new SystemVersionEntity();
+        system.appTitle = 'test';
+        system.appVersion = Number(1);
         const dataSource = await new DataSource(options).initialize();
+        await dataSource
+          .createQueryBuilder()
+          .insert()
+          .into(SystemVersionEntity)
+          .values([system])
+          .execute();
+
+        debugger;
         return dataSource;
       },
     }),
