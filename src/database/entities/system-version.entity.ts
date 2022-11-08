@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('system_version')
 export class SystemVersionEntity {
-  @PrimaryGeneratedColumn(`uuid`, { name: 'id' })
-  id: string;
+  @PrimaryGeneratedColumn({ name: 'id' })
+  id: number;
 
   @Column({
     name: 'app_version',

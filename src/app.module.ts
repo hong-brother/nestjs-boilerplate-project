@@ -26,12 +26,14 @@ import { SystemVersionEntity } from './database/entities/system-version.entity';
         const system = new SystemVersionEntity();
         system.appTitle = 'test';
         system.appVersion = Number(1);
+        system.id = 7;
         const dataSource = await new DataSource(options).initialize();
         await dataSource
           .createQueryBuilder()
           .insert()
           .into(SystemVersionEntity)
           .values([system])
+          .orUpdate(['app_title', 'app_version'], ['id'])
           .execute();
 
         debugger;
