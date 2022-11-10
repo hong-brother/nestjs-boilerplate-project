@@ -1,21 +1,22 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('system_version')
 export class SystemVersionEntity {
-  @PrimaryGeneratedColumn(`uuid`, { name: 'id' })
-  id: string;
+  @PrimaryColumn({ name: 'id' })
+  id: number;
 
   @Column({
     name: 'app_version',
-    type: 'integer',
+    type: 'varchar',
+    length: 10,
     comment: 'app version',
   })
-  appVersion: number;
+  appVersion: string;
 
   @Column({
     name: 'app_title',
     type: 'varchar',
-    length: 10,
+    length: 50,
     comment: 'app title',
   })
   appTitle: string;

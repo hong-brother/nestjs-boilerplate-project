@@ -14,6 +14,19 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
+function disableUpgradeInsecureRequests(app, helmet) {
+  const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
+  delete defaultDirectives['upgrade-insecure-requests'];
+
+  app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        ...defaultDirectives,
+      },
+    }),
+  );
+}
+
 export async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
@@ -37,6 +50,7 @@ export async function bootstrap() {
   app.setGlobalPrefix(appConfig.getCommon('prefix'));
   app.use(compression()); // http 압축
   app.use(helmet()); //노드 보안 모듈 기본 설정
+  disableUpgradeInsecureRequests(app, helmet);
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
