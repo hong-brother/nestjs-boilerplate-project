@@ -22,22 +22,18 @@ import { SystemVersionEntity } from './database/entities/system-version.entity';
     TypeOrmModule.forRootAsync({
       useClass: TypeormConfigService,
       dataSourceFactory: async (options) => {
-        debugger;
         const system = new SystemVersionEntity();
-        system.appTitle = 'test';
-        system.appVersion = Number(1);
-        system.id = 7;
+        system.appTitle = process.env.npm_package_name;
+        system.appVersion = process.env.npm_package_version;
+        system.id = 1;
         const dataSource = await new DataSource(options).initialize();
-        // TODO 보강 필요
         await dataSource
           .createQueryBuilder()
           .insert()
           .into(SystemVersionEntity)
           .values([system])
-          .orUpdate(['app_title', 'app_version'], ['id'])
+          .orUpdate(['id', 'app_title', 'app_version'], ['id'])
           .execute();
-
-        debugger;
         return dataSource;
       },
     }),
