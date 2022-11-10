@@ -21,6 +21,7 @@ services:
     image: dpage/pgadmin4
     ports:
       - "8080:80"
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: nestjs@boilerplate.com
       PGADMIN_DEFAULT_PASSWORD: nestjs

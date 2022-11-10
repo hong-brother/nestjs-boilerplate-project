@@ -1,5 +1,7 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppConfig } from './app.config';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export class SwaggerSetUp {
   private readonly appConfig: AppConfig;
@@ -33,6 +35,6 @@ export class SwaggerSetUp {
   }
 
   private description() {
-    return `### boilerplate`;
+    return readFileSync(join(__dirname, 'docs', 'api-document.md'), 'utf8');
   }
 }
