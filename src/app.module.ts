@@ -28,6 +28,7 @@ import { SystemVersionEntity } from './database/entities/system-version.entity';
         system.appVersion = Number(1);
         system.id = 7;
         const dataSource = await new DataSource(options).initialize();
+        // TODO 보강 필요
         await dataSource
           .createQueryBuilder()
           .insert()
