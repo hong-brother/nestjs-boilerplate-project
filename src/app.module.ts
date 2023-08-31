@@ -1,22 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AppConfig } from './config/app.config';
 import { SharedModule } from './shared/shared.module';
-import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
+import { HealthCheckerModule } from './api/health-checker/health-checker.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [AppConfig.getConfig],
       isGlobal: true,
       cache: true,
+      envFilePath: '.env',
     }),
     HealthCheckerModule,
     SharedModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
