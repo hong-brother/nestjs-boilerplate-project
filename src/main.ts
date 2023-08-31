@@ -1,79 +1,29 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import type { NestExpressApplication } from '@nestjs/platform-express';
-import { ExpressAdapter } from '@nestjs/platform-express';
+import { Logger as NestLogger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { AppConfig } from './config/app.config';
-import { SwaggerSetUp } from './config/swagger.set.up';
-import compression from 'compression';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
 import { SharedModule } from './shared/shared.module';
-import {
-  HttpStatus,
-  UnprocessableEntityException,
-  ValidationPipe,
-} from '@nestjs/common';
+import { HttpStatus, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { middleware } from './app.middleware';
+import { swaggerConfig } from './config/swagger.config';
+import { ConfigService } from '@nestjs/config';
 
-function disableUpgradeInsecureRequests(app, helmet) {
-  const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
-  delete defaultDirectives['upgrade-insecure-requests'];
-
-  app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        ...defaultDirectives,
-      },
-    }),
-  );
-}
-
-export async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(
-    AppModule,
-    new ExpressAdapter(),
-    { cors: true },
-  );
-  // get config
-  // https://ru-nestjs-docs.netlify.app/application-context
-  const appConfig = app.select(SharedModule).get(AppConfig);
-
+declare const module: any;
+async function bootstrap(): Promise<string> {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), { cors: true });
+  const config = app.select(SharedModule).get(ConfigService);
   // setting
-  app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*.*.*.*'); // update to match the domain you will make the request from
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
-    );
-    next();
-  });
+  app.enableCors();
   app.enableVersioning(); // router version 명시 할 수 있도록
-  app.setGlobalPrefix(appConfig.getCommon('prefix'));
-  app.use(compression()); // http 압축
-  app.use(helmet()); //노드 보안 모듈 기본 설정
-  disableUpgradeInsecureRequests(app, helmet);
-  app.use(
-    rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMswindowMs: 15 * 1999 * 60
-    }), // 단위 시간 동안 하나의 ip 주소에서 들어오는 request의 숫자를 제한할 수 있는 간단한 모듈이다.
-  );
+  app.setGlobalPrefix('/api');
+  app.useGlobalFilters(new HttpExceptionFilter());
 
-  // globalFilters
-  // const reflector = app.get(Reflector);
-  // app.useGlobalFilters(
-  //   new HttpExceptionFilter(reflector),
-  //   new QueryFailedFilter(reflector),
-  // );
+  // express Middleware
+  middleware(app, config);
 
-  // useGlobalInterceptors
-  // app.useGlobalInterceptors(
-  //   new ClassSerializerInterceptor(reflector),
-  //   new TranslationInterceptor(
-  //     app.select(SharedModule).get(TranslationService),
-  //   ),
-  // );
-
-  // global Pipes
+  app.set('trust proxy', 1); // client ip를 가져오기 위한
+  //global pipes
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -83,16 +33,24 @@ export async function bootstrap() {
       exceptionFactory: (errors) => new UnprocessableEntityException(errors),
     }),
   );
-
   // swagger
-  const document = new SwaggerSetUp(appConfig);
-  document.createDocument();
-  document.setUp(app);
+  swaggerConfig(app);
 
-  await app.listen(appConfig.port);
+  await app.listen(config.get('HTTP_PORT') || 3000);
+  // app.enableShutdownHooks();
 
-  app.enableShutdownHooks();
-
-  return app;
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+  return app.getUrl();
 }
-void bootstrap();
+
+(async (): Promise<void> => {
+  try {
+    await bootstrap();
+    NestLogger.log(`http://localhost:${process.env.HTTP_PORT || 3000}/api-doc`, 'Bootstrap');
+  } catch (error) {
+    NestLogger.error(error, 'Bootstrap');
+  }
+})();
