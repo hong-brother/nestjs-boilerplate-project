@@ -1,13 +1,11 @@
-import { HttpModule } from '@nestjs/axios';
 import { Global, Module } from '@nestjs/common';
-import { GeneratorService } from '../common/providers/generator.service';
-import { AppConfig } from '../config/app.config';
+import { ConfigService } from '@nestjs/config';
 
-const providers = [AppConfig, GeneratorService];
+const providers = [ConfigService];
 @Global()
 @Module({
   providers,
-  imports: [HttpModule],
-  exports: [...providers, HttpModule],
+  imports: [],
+  exports: [...providers],
 })
 export class SharedModule {}

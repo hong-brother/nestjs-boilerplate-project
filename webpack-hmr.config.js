@@ -6,7 +6,7 @@ const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 
 module.exports = {
   // https://github.com/nestjs/nest-cli/issues/612
-  entry: ['webpack/hot/poll?100', './src/main.ts'],
+  entry: ['webpack/hot/poll?100', './src/app.ts'],
   devtool: 'inline-source-map',
   target: 'node',
   externals: [

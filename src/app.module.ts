@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppConfig } from './config/app.config';
 import { SharedModule } from './shared/shared.module';
-import { HealthCheckerModule } from './api/health-checker/health-checker.module';
+import { HealthModule } from './api/health-check/health.module';
 
 @Module({
   imports: [
@@ -11,7 +10,7 @@ import { HealthCheckerModule } from './api/health-checker/health-checker.module'
       cache: true,
       envFilePath: '.env',
     }),
-    HealthCheckerModule,
+    HealthModule,
     SharedModule,
   ],
   controllers: [],
