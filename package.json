@@ -23,7 +23,6 @@
   "prisma": {
     "schema": "src/common/providers/database/postgresql/schema.prisma"
   },
-
   "dependencies": {
     "@depyronick/nestjs-clickhouse": "^2.0.2",
     "@nestjs/axios": "^3.0.0",
