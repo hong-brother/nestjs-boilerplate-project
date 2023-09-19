@@ -1,4 +1,4 @@
-// import { bootstrap } from './src/main';
+// import { bootstrap } from './src/app';
 // import * as module from 'module';
 //
 // void bootstrap().then((app) => {

@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import * as providers from './providers';
+import * as providers from './utils';
 const services = Object.values(providers);
 @Global()
 @Module({
