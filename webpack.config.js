@@ -1,13 +1,10 @@
-/* eslint-disable */
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 
 module.exports = {
-  // https://github.com/nestjs/nest-cli/issues/612
   entry: ['webpack/hot/poll?100', './src/app.ts'],
-  devtool: 'inline-source-map',
   target: 'node',
   externals: [
     nodeExternals({
@@ -29,11 +26,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new RunScriptWebpackPlugin({
-      name: 'server.js',
-      autoRestart: false,
-      nodeArgs: ['--inspect=0.0.0.0:9229'],
-    }),
+    new RunScriptWebpackPlugin({ name: 'server.js', autoRestart: false }),
   ],
   output: {
     path: path.join(__dirname, 'dist'),

@@ -65,9 +65,7 @@ shared는 global 모듈이 존재하는 곳으로 전역으로 관리되는 모�
 
 ## 프로젝트 기능
 🐳 Docker  - 컨테이너 플랫폼
-
 ♻️ Nginx - 웹 서버
-
 ✨ ESLint, Prettier - 정적 코드 분석 및 코드 스타일 변환
 
 📗 Swagger -  API 문서화
